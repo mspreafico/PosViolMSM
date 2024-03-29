@@ -3,7 +3,7 @@ Code for implementing a simulation study to investigate the effect of positivity
 
 
 ### Reference
-Spreafico M (2024). Positivity violations in marginal structural survival models with time-dependent confounding: a simulation study on IPTW-estimator performance. [https://arxiv.org/abs/2311.04103](https://arxiv.org/abs/2403.19606)
+Spreafico M (2024). Positivity violations in marginal structural survival models with time-dependent confounding: a simulation study on IPTW-estimator performance. https://arxiv.org/abs/2403.19606 
 
 
 ## Description
