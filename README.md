@@ -13,7 +13,7 @@ Spreafico M. Positivity violations in marginal structural survival models with t
   - **AI_2 results.R**: Simulation study using Algorithm I - Results (see Section 4.2.2).
   - **AI_3 figures_2_3.R**: reproducing Figures 2 and 3.
   - **AII_1 simulations.R**: Simulation study using Algorithm II - Investigating various scenarios (see Section 5.2.1).
-  - **AII_results.R**: Simulation study using Algorithm II - Results (see Section 5.2.2 ).
+  - **AII_results.R**: Simulation study using Algorithm II - Results (see Section 5.2.2).
   - **AII_3 figures_4_5.R**: reproducing Figures 4 and 5.
     
 - Sub-folder **./functions/** contains some auxiliary functions to run the main files:
