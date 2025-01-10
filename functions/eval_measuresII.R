@@ -20,8 +20,10 @@ eval.resultsII <- function(data, coef.name, true.df, var.names = c('WT','pi','ta
   result[, Bias_MCse := empSE/sqrt(B), by=var.names]
   result[, MSE := sum((error)^2)/B, by=var.names]
   result[, MSE_MCse := sqrt(sum(((error)^2-MSE)^2)/(B*(B-1))), by=var.names]
+  result[, rel_Bias := Bias/true, by=var.names]
+  result[, RMSE := sqrt(MSE), by=var.names]
   
-  keep2 = c(var.names,'meanG','empSE','Bias','Bias_MCse','MSE','MSE_MCse')
+  keep2 = c(var.names,'meanG','empSE','Bias','Bias_MCse','MSE','MSE_MCse','rel_Bias','RMSE')
   eval = result[, ..keep2]
   eval = eval[!duplicated(eval)]
   
@@ -63,3 +65,4 @@ eval.marginal.surv.probII <- function(data.surv, var.names = c('WT','pi','tau','
   
   return(list('errors' = errors, 'eval' = eval))
 }
+

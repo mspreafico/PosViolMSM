@@ -32,10 +32,8 @@ get.std.weightsII <- function(df.long, trunc = FALSE, percentiles = c(1,99)) {
   
   # Stabilized weights
   df.long$sw = df.long$wt.cum.num/df.long$wt.cum
-  
   # Truncated Stabilized weight
   if(trunc==TRUE){ df.long$sw <- trunc.sw(df.long$sw, percentiles = percentiles) }
-  # Add the stabilized weight to the dataset
   
   return(df.long)
 }

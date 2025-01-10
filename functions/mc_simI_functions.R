@@ -32,10 +32,12 @@ get.std.weightsI <- function(data, kappa, trunc = TRUE, percentiles = c(1,99)) {
                                                                    1-predict(num, type='response'))
   # Stabilized weight under time-dependent treatment (cumulative)
   treat.weights <- unlist(tapply(treat.prob.num/treat.prob.den, data$id, cumprod))
-  if(trunc==TRUE){ treat.weights <- trunc.sw(treat.weights, percentiles = percentiles) }
   # Add the stabilized weight to the dataset
-  data <- cbind(data, estprob=treat.prob.den, sw=treat.weights)
-  return(data)
+  data.weights = cbind(data, sw=treat.weights)
+  # Truncation
+  if(trunc==TRUE){ data.weights$sw <- trunc.sw(data.weights$sw, percentiles = percentiles) }
+  
+  return(data.frame(data.weights))
 }
 
 

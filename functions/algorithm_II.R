@@ -1,5 +1,5 @@
 ########################################
-#     Algorithm II - Section 3.3.2     #
+#     Algorithm II - Section 5.1.2     #
 ########################################
 library(data.table)
 
