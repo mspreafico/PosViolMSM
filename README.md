@@ -26,7 +26,7 @@ Spreafico M. Positivity violations in marginal structural survival models with t
   - **plot_simI.R**: Functions to plot results for Algorithm I.
   - **plot_simII.R**: Functions to plot results for Algorithm II.
       
-- Sub-folder **./results/** contains the results from the various scenarios and relative performance.
+- After running the main scripts, sub-folder **./results/** will contain the results from the various scenarios and relative performance.
 
 ## Software
 - R software, version 4.3.1
