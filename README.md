@@ -21,6 +21,8 @@ Spreafico M. Positivity violations in marginal structural survival models with t
   - **algorithm_II.R**: Code for Algorithm II (see Section 5.1.2).
   - **eval_measuresI.R**: Functions to evaluate the results for the scenarios simulated using Algorithm I. 
   - **eval_measuresII.R**: Functions to evaluate the results for the scenarios simulated using Algorithm II. 
+  - **iptw_I.R**: Functions to perform IPTW in Simulation Study I.
+  - **iptw_II.R**: Functions to perform IPTW in Simulation Study II.
   - **mc_simI_functions.R**: Functions to estimate the logit-MSMs using the longitudinal datasets simulated from Algorithm I.
   - **mc_simII_functions.R**: Functions to estimate the Aalen-MSMs using the longitudinal datasets simulated from Algorithm II.
   - **plot_simI.R**: Functions to plot results for Algorithm I.

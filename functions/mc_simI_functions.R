@@ -2,44 +2,8 @@
 #  Functions to estimate the logit-MSMs using  #
 # longitudinal data simulated from Algorithm I #
 ################################################
-
-# Weight truncation
-trunc.sw <- function(weights, percentiles) {
-  lowerQ = quantile(weights, percentiles[1]/100)
-  upperQ = quantile(weights, percentiles[2]/100)
-  #Truncation
-  weights = ifelse(weights < lowerQ, lowerQ, weights)
-  weights = ifelse(weights > upperQ, upperQ, weights)
-  return(weights)
-}
-
-
-# Get IPTW weights
-get.std.weightsI <- function(data, kappa, trunc = TRUE, percentiles = c(1,99)) {
-  # data: data simulated from one of three above functions
-  # kappa: time interval between which exposure and confounder can be updated.
-  # Model for denominator (includes L)
-  den <- glm(A ~ visit + L, family=binomial, subset=(visit %% kappa == 0 & A_1==0), data=data)
-  treat.prob.den <- rep(1, dim(data)[1])
-  treat.prob.den[data$visit %% kappa == 0 & data$A_1==0] <- ifelse(data$A[data$visit %% kappa == 0 & data$A_1==0]==1, 
-                                                                   predict(den, type='response'), 
-                                                                   1-predict(den, type='response'))
-  # Model for numerator (no L)
-  num <- glm(A ~ visit, family=binomial, subset=(visit %% kappa == 0 & A_1==0), data=data) 
-  treat.prob.num <- rep(1, dim(data)[1])
-  treat.prob.num[data$visit %% kappa == 0 & data$A_1==0] <- ifelse(data$A[data$visit %% kappa == 0 & data$A_1==0]==1, 
-                                                                   predict(num, type='response'), 
-                                                                   1-predict(num, type='response'))
-  # Stabilized weight under time-dependent treatment (cumulative)
-  treat.weights <- unlist(tapply(treat.prob.num/treat.prob.den, data$id, cumprod))
-  # Add the stabilized weight to the dataset
-  data.weights = cbind(data, sw=treat.weights)
-  # Truncation
-  if(trunc==TRUE){ data.weights$sw <- trunc.sw(data.weights$sw, percentiles = percentiles) }
-  
-  return(data.frame(data.weights))
-}
-
+source('functions/algorithm_I.R')
+source('functions/iptw_I.R')
 
 # MC functions
 mc.sim.algI <- function(B, pi.compliance, tau.rule, n.size, 
@@ -54,11 +18,22 @@ mc.sim.algI <- function(B, pi.compliance, tau.rule, n.size,
   }else{
     setting = data.frame('WT' = 'NoWT', 'pi' = pi.compliance, 'tau' = tau.rule, 'n' = n.size)
   }
+  
+  gamma = NULL
+  ipw.weights = NULL
   for(b in 1:B){
     tmp = NULL
+    tmp.ipw = NULL
     df = sim.algorithmI(pi.prop = pi.compliance, tau = tau.rule, n = n.size, 
                         K, kappa, gam = gam_true, theta = theta_cond)
+    # Weights
     df_sw <- get.std.weightsI(df, kappa, trunc, percentiles=trunc.percentiles) 
+    df_sw_kappa = df_sw[df_sw$visit %% kappa == 0, which(colnames(df_sw) %in% c('id','visit','sw'))]
+    tmp.ipw = eval.ipwI(data.table(df_sw_kappa))
+    tmp.ipw = data.frame('rep_b' = rep(b, dim(tmp.ipw)[1]), 
+                         setting[rep(seq_len(nrow(setting)), each = dim(tmp.ipw)[1]), ], tmp.ipw)
+    ipw.weights = rbind.data.frame(ipw.weights, tmp.ipw)
+    # Coefficients
     est_coefs <- coef(glm(Y ~ d1 + A + d3, family=quasibinomial, data=df_sw, weights=sw))
     tmp = data.frame('rep_b' = b, setting, 'gamma0'= est_coefs[1],
                      'gammaA1'= est_coefs[2],'gammaA2'= est_coefs[3],'gammaA3'= est_coefs[4])
@@ -66,7 +41,10 @@ mc.sim.algI <- function(B, pi.compliance, tau.rule, n.size,
   }
   
   rownames(gammas) = 1:B
-  return(gammas)
+  rownames(ipw.weights) = 1:dim(ipw.weights)[1]
+  
+  return(list('coef_est' = gammas,
+              'weights' = ipw.weights))
 }
 
 

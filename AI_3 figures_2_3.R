@@ -1,3 +1,9 @@
+######################################
+# Simulation study using Algorithm I #
+#------------------------------------#
+#    Results across all scenarios    #
+#         (see Section 4.2.2)        #
+######################################
 library(data.table)
 library(ggplot2)
 library(ggpubr)

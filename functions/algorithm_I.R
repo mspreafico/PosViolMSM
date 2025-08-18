@@ -89,7 +89,7 @@ sim.algorithmI <- function(pi.prop, tau, n,
   sim_df[, d3 := A * (visit - Kstar)]
   
   # put all variables in one dataframe
-  sim_df = sim_df[, .(id, visit, Y, A, A_1, L, d1, d3, hazard, surv)]
+  sim_df = sim_df[, .(id, visit, Y, A, A_1, L, d1, d3)]
   setorder(sim_df, cols = "id", "visit")
   
   # return dataframe

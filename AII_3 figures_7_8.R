@@ -1,3 +1,9 @@
+#######################################
+# Simulation study using Algorithm II #
+#-------------------------------------#
+#    Results across all scenarios     #
+#         (see Section 5.2.2)         #
+#######################################
 library(data.table)
 library(ggplot2)
 library(ggpubr)
@@ -8,6 +14,7 @@ source("functions/plots_simII.R")
 # Counterfactual Survivals #
 #--------------------------#
 load('results/algorithmII/surv_perfs.Rdata')
+#load('results/algorithmII/surv_perfs_avg_allt.Rdata')
 load('results/algorithmII/true_survivals.Rdata')
 
 n_sizes = c(50,100,250,500,1000)
@@ -25,10 +32,10 @@ for(nn in 1:length(n_sizes)){
   }
 }
 
-#### FIGURE 4
+#### FIGURE 7
 dev.new()
 nn1=1 #first sample size index 1
-nn2=5 #second sample size index 2
+nn2=2 #second sample size index 2
 plot.n = ggarrange(nowt[[nn1]][[2]]+rremove("ylab") + coord_cartesian(ylim = c(0, 1)),
                    nowt[[nn1]][[3]]+rremove("ylab") + coord_cartesian(ylim = c(0, 1)), 
                    nowt[[nn1]][[4]]+rremove("ylab") + coord_cartesian(ylim = c(0, 1)),
@@ -47,7 +54,7 @@ annotate_figure(plot.n, left = text_grob("Marginal Survival Probability         
 # Edit nn1 and nn2 for different sample sizes
 
 
-#### FIGURE 5
+#### FIGURE 8
 #No WT
 nowt2 = list()
 for(nn in 1:length(n_sizes)){

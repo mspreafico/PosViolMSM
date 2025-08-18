@@ -2,41 +2,9 @@
 #  Functions to estimate the Aalen-MSMs using   #
 # longitudinal data simulated from Algorithm II #
 #################################################
+source('functions/algorithm_II.R')
+source('functions/iptw_II.R')
 library(timereg)
-
-# Weight truncation
-trunc.sw <- function(weights, percentiles) {
-  lowerQ = quantile(weights, percentiles[1]/100)
-  upperQ = quantile(weights, percentiles[2]/100)
-  #Truncation
-  weights = ifelse(weights < lowerQ, lowerQ, weights)
-  weights = ifelse(weights > upperQ, upperQ, weights)
-  return(weights)
-}
-
-# Get IPTW weights
-get.std.weightsII <- function(df.long, trunc = FALSE, percentiles = c(1,99)) {
-  # df.long: data simulated in long format
-  
-  # Model for denominator (includes L)
-  wt.mod = glm(A ~ L + Alag1, family="binomial", data=df.long)
-  pred.wt = predict(wt.mod, type = "response")
-  df.long$wt = ifelse(df.long$A==1, pred.wt, 1-pred.wt)
-  df.long$wt.cum = ave(df.long$wt, df.long$id, FUN=cumprod)
-  
-  # Model for numerator (no L)
-  wt.mod.num = glm(A ~ Alag1, family="binomial", data=df.long)
-  pred.wt.num = predict(wt.mod.num, type = "response")
-  df.long$wt.num = ifelse(df.long$A==1, pred.wt.num, 1-pred.wt.num)
-  df.long$wt.cum.num = ave(df.long$wt.num, df.long$id, FUN=cumprod)
-  
-  # Stabilized weights
-  df.long$sw = df.long$wt.cum.num/df.long$wt.cum
-  # Truncated Stabilized weight
-  if(trunc==TRUE){ df.long$sw <- trunc.sw(df.long$sw, percentiles = percentiles) }
-  
-  return(df.long)
-}
 
 # Fit Aalen's marginal structural models
 aalen.MSM <- function(df.long, K){
@@ -164,14 +132,22 @@ mc.sim.algII <- function(B, pi.compliance, tau.rule, n.size,
   settingK = setting[rep(seq_len(nrow(setting)), each = K), ]
   settingHOR = setting[rep(seq_len(nrow(setting)), each = length(t.hor)), ]
   
+  ipw.weights = NULL
   est.cum.coefs = NULL
   surv.est = NULL
   for(b in 1:B){
     tmp = NULL
+    tmp.ipw = NULL
     tmp_surv = NULL
     df = sim.algorithmII(pi.prop = pi.compliance, tau = tau.rule, n = n.size, 
                          K, alphas = alpha_cond, thetas = theta_cond)
+    # Weights
     df.sw = get.std.weightsII(df, trunc, percentiles=trunc.percentiles) 
+    tmp.ipw = eval.ipwII(df.weights = data.table('id'=df.sw$id,'time'=df.sw$time,'sw'=df.sw$sw))
+    tmp.ipw = data.frame('rep_b' = rep(b, dim(tmp.ipw)[1]), 
+                         setting[rep(seq_len(nrow(setting)), each = dim(tmp.ipw)[1]), ], tmp.ipw)
+    ipw.weights = rbind.data.frame(ipw.weights, tmp.ipw)
+    # MSM
     MSMmodel = aalen.MSM(df.sw, K)
     # Cumulative coefficients
     cum.coefs = cum.coef.aalen(MSMmodel, t.hor)
@@ -183,10 +159,12 @@ mc.sim.algII <- function(B, pi.compliance, tau.rule, n.size,
     tmp.surv = data.frame('rep_b' = rep(b,length(t.hor)), settingHOR, surv.df)
     surv.est = rbind.data.frame(surv.est, tmp.surv)
   }
+  rownames(ipw.weights) = 1:dim(ipw.weights)[1]
   rownames(est.cum.coefs) = 1:(B*K)
   rownames(surv.est) = 1:(B*length(t.hor))
   
-  return(list('cum_coefs' = data.table(est.cum.coefs),
+  return(list('weights' = data.table(ipw.weights),
+              'cum_coefs' = data.table(est.cum.coefs),
               'survivals' = data.table(surv.est)) )
 }
 

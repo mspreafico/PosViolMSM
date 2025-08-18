@@ -26,6 +26,7 @@ foreach(j=1:n.cores) %dopar% {
   perc_matrix = matrix(c(NA,NA,1,99,5,95,10,90), nrow=4, byrow=T)
   
   coef_est = NULL
+  ipw_weights = NULL
   set.seed(30042007)
   for(i in 1:length(trunc_vec)){
     for(pp in pi_values){
@@ -33,10 +34,12 @@ foreach(j=1:n.cores) %dopar% {
         result = mc.sim.algI(B = nsim, pi.compliance = pp, tau.rule = tt, 
                              n.size = n_sizes[j], trunc = trunc_vec[i],
                              trunc.percentiles = as.vector(perc_matrix[i,]))
-        coef_est = rbind.data.frame(coef_est,result)
+        coef_est = rbind.data.frame(coef_est, result$coef_est)
+        ipw_weights = rbind.data.frame(ipw_weights, result$weights)
       }
     }
   }
+  save(ipw_weights, file=paste0("results/algorithmI/ipw_summary_n",n_sizes[j],".Rdata"))
   save(coef_est,file=paste0("results/algorithmI/sim_coefs_n",n_sizes[j],".Rdata"))
   print(paste0("SAVED: files for sample size ", n_sizes[j]))
 }

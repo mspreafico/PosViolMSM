@@ -35,21 +35,25 @@ foreach(j=1:n.cores) %dopar% {
   trunc_vec = c(FALSE,TRUE,TRUE,TRUE)
   perc_matrix = matrix(c(NA,NA,1,99,5,95,10,90), nrow=4, byrow=T)
   
+  ipw_weights = NULL
   cum_coef_est = NULL
   surv_est = NULL
   set.seed(30042007)
   for(i in 1:length(trunc_vec)){
     for(pp in pi_values){
       for(tt in thresholds){
+        print(paste0(i,'-',pp,'-',tt))
         result = mc.sim.algII(B = nsim, pi.compliance = pp, tau.rule = tt,
                               n.size = n_sizes[j], trunc = trunc_vec[i],
                               trunc.percentiles = as.vector(perc_matrix[i,]),
                               t.hor = time_points)
+        ipw_weights = rbind.data.frame(ipw_weights, result$weights)
         cum_coef_est = rbind.data.frame(cum_coef_est, result$cum_coefs)
         surv_est = rbind.data.frame(surv_est, result$survivals)
       }
     }
   }
+  save(ipw_weights, file=paste0("results/algorithmII/ipw_summary_n",n_sizes[j],".Rdata"))
   save(cum_coef_est, file=paste0("results/algorithmII/sim_coefs_n",n_sizes[j],".Rdata"))
   save(surv_est, file=paste0("results/algorithmII/survival_est_n",n_sizes[j],".Rdata"))
   print(paste0("SAVED: files for sample size ", n_sizes[j]))

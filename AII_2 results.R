@@ -1,9 +1,9 @@
-#####################################################
-#       Simulation study using Algorithm II         #
-#---------------------------------------------------#
-#                      Results                      #
-# (see Section 5.2.2 and Supplementary Material S2) #
-#####################################################
+#################################################
+#   Simulation study using Algorithm II         #
+#-----------------------------------------------#
+#                   Results                     #
+# (see Section 5 and Supplementary Material S2) #
+#################################################
 
 rm(list=ls())
 source("functions/eval_measuresII.R")
@@ -51,15 +51,15 @@ true_surv
 # Load all simulation survivals
 all_surv_est = NULL
 load('results/algorithmII/survival_est_n50.Rdata')
-all_surv_est = rbind(all_surv_est, surv_est[time %in% c(0:5)])
+all_surv_est = rbind(all_surv_est, surv_est)
 load('results/algorithmII/survival_est_n100.Rdata')
-all_surv_est = rbind(all_surv_est, surv_est[time %in% c(0:5)])
+all_surv_est = rbind(all_surv_est, surv_est)
 load('results/algorithmII/survival_est_n250.Rdata')
-all_surv_est = rbind(all_surv_est, surv_est[time %in% c(0:5)])
+all_surv_est = rbind(all_surv_est, surv_est)
 load('results/algorithmII/survival_est_n500.Rdata')
-all_surv_est = rbind(all_surv_est, surv_est[time %in% c(0:5)])
+all_surv_est = rbind(all_surv_est, surv_est)
 load('results/algorithmII/survival_est_n1000.Rdata')
-all_surv_est = rbind(all_surv_est, surv_est[time %in% c(0:5)])
+all_surv_est = rbind(all_surv_est, surv_est)
 table(all_surv_est$n)
 
 # Compute mean survival probabilities for never treated and always treated 
@@ -68,5 +68,14 @@ load('results/algorithmII/true_survivals.Rdata')
 surv_perfs = eval.marginal.surv.probII(data.surv = all_surv_est, 
                                        true.surv = true_surv)
 save(surv_perfs, file='results/algorithmII/surv_perfs.Rdata')
+
+# Compute mean survival probabilities for never treated and always treated 
+# at time t = 0, 0.1, 0.2, ..., 4.9, 5.0
+all_surv_est[, avg_surv0 := mean(surv0), by=c('WT','pi','tau','n','time')]
+all_surv_est[, avg_surv1 := mean(surv1), by=c('WT','pi','tau','n','time')]
+eval = result[, c(2:6,9:10)]
+eval = eval[!duplicated(eval)]
+surv_perfs = list('eval' = eval)
+save(surv_perfs, file='results/algorithmII/surv_perfs_avg_allt.Rdata')
 
 
