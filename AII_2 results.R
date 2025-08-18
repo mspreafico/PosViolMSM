@@ -1,9 +1,9 @@
-#################################################
-#   Simulation study using Algorithm II         #
-#-----------------------------------------------#
-#                   Results                     #
-# (see Section 5 and Supplementary Material S2) #
-#################################################
+###################################################
+#    Simulation study using Algorithm II          #
+#-------------------------------------------------#
+#                    Results                      #
+# (see Section 5.2 and Supplementary Material S2) #
+###################################################
 
 rm(list=ls())
 source("functions/eval_measuresII.R")

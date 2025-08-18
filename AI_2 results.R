@@ -2,7 +2,7 @@
 #       Simulation study using Algorithm I          #
 #---------------------------------------------------#
 #                      Results                      #
-#   (see Section 4 and Supplementary Material S1)   #
+#  (see Section 4.2 and Supplementary Material S1)  #
 #####################################################
 source("functions/eval_measuresI.R")
 
