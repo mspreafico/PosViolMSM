@@ -2,9 +2,8 @@
 #  Functions to estimate the Aalen-MSMs using   #
 # longitudinal data simulated from Algorithm II #
 #################################################
-source('functions/algorithm_II.R')
-source('functions/iptw_II.R')
 library(timereg)
+source('functions/iptw_II.R')
 
 # Fit Aalen's marginal structural models
 aalen.MSM <- function(df.long, K){

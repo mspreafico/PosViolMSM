@@ -1,9 +1,9 @@
-###################################################
-#    Simulation study using Algorithm II          #
-#-------------------------------------------------#
-#                    Results                      #
-# (see Section 5.2 and Supplementary Material S2) #
-###################################################
+#####################################################
+#       Simulation study using Algorithm II         #
+#---------------------------------------------------#
+#                      Results                      #
+# (see Section 5.2.2 and Supplementary Material S2) #
+#####################################################
 
 rm(list=ls())
 source("functions/eval_measuresII.R")
@@ -73,7 +73,7 @@ save(surv_perfs, file='results/algorithmII/surv_perfs.Rdata')
 # at time t = 0, 0.1, 0.2, ..., 4.9, 5.0
 all_surv_est[, avg_surv0 := mean(surv0), by=c('WT','pi','tau','n','time')]
 all_surv_est[, avg_surv1 := mean(surv1), by=c('WT','pi','tau','n','time')]
-eval = result[, c(2:6,9:10)]
+eval = all_surv_est[, c(2:6,9:10)]
 eval = eval[!duplicated(eval)]
 surv_perfs = list('eval' = eval)
 save(surv_perfs, file='results/algorithmII/surv_perfs_avg_allt.Rdata')

@@ -2,7 +2,7 @@
 #       Simulation study using Algorithm I          #
 #---------------------------------------------------#
 #                      Results                      #
-#  (see Section 4.2 and Supplementary Material S1)  #
+# (see Section 4.2.2 and Supplementary Material S1) #
 #####################################################
 source("functions/eval_measuresI.R")
 
@@ -54,8 +54,6 @@ save(surv_est, file='results/algorithmI/survival_est.Rdata')
 # with relative performance
 surv_perfs = eval.marginal.surv.probI(data.surv = surv_est, true.surv = true_surv)
 save(surv_perfs, file='results/algorithmI/surv_perfs.Rdata')
-
-
 
 
 

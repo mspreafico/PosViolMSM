@@ -1,9 +1,3 @@
-######################################
-# Simulation study using Algorithm I #
-#------------------------------------#
-#    Results across all scenarios    #
-#         (see Section 4.2.2)        #
-######################################
 library(data.table)
 library(ggplot2)
 library(ggpubr)
@@ -138,3 +132,4 @@ plot.wt.b = ggarrange(wt5[[nn]][[2]]+rremove("ylab"),
                      ncol=6, nrow=2, common.legend = TRUE, legend = 'none', align='hv')
 annotate_figure(plot.wt.b, left = text_grob("Marginal Survival Probability                                       Marginal Survival Probability ", 
                                          size=10, rot = 90, vjust = 0.9))
+
