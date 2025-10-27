@@ -37,5 +37,29 @@ Spreafico M (2025). Impact of near-positivity violations on IPTW-estimated margi
 ## Software
 - R software, version 4.3.1
 - Packages: data.table, doParallel, foreach, ggplot2, ggpubr, tidyr, timereg.
+
+## Additional info
+
+To reproduce the **Simulation Study I** in Section 4.2 of the manuscript:
+1) first run the script **AI_1 simulations.R** to simulate the $B=1000$ datasets under the different scenarios detailed in Section 4.2.1.
+   Parallelisation details/remarks:
+   - This code is parallelised over the different sample sizes considered, so 5 cores are used by default.
+   - If your machine has fewer than 5 cores, you should adjust the value of n.cores when calling the function *run_simulation_studyI()* (line 73). In this case, n.sizes should be a vector whose length matches the number of cores.
+   - Note that if the number of cores is less than the number of sample sizes, not all sample sizes will be processed in a single run. You will need to re-run the code multiple times to obtain results for all sample sizes.
+   - The running time for n.sim = 5 is 6.33 minutes. Based on this, the expected running time for n.sim = 1000 is approximately 21–22 hours.
+2) Then run the scripts **AI_2 results.R** to estimate the performance measures in Section 4.2.2 and **AI_3 figures_2_3.R** for reproducing Figures 2 and 3;
+3) Finally, run the script **AI_4 figures_4_5_6 table_1.R** for reproducing Figures 4, 5, 6 and Table 1 in Section 4.2.3.
+ 
+
+
+To reproduce the **Simulation Study II** in Section 5.2 of the manuscript:
+1) first run the script **AII_1 simulations.R** to perform simulations under the different scenarios detailed in Section 5.2.1.
+   Parallelisation details/remarks:
+   - This code is parallelised over the different sample sizes considered, so 5 cores are used by default.
+   - If your machine has fewer than 5 cores, you should adjust the value of n.cores when calling the function *run_simulation_studyII()* (line 88). In this case, n.sizes should be a vector whose length matches the number of cores.
+   - Note that if the number of cores is less than the number of sample sizes, not all sample sizes will be processed in a single run. You will need to re-run the code multiple times to obtain results for all sample sizes.
+   - The running time for n.sim = 5 is 41.36 seconds. Based on this, the expected running time for n.sim = 1000 is approximately 2.5 hours.
+2) Then run the scripts **AII_2 results.R** to estimate the performance measures in Section 5.2.2 and **AII_3 figures_4_5.R** for reproducing Figures 4 and 5;
+3) finally, run the script **AII_4 figures_9_10_11 tables_2_3.R** for reproducing Figures 9, 10, 11 and Tables 2 and 3 in Section 5.2.3.
   
-(Last update: August 18th, 2025)
+(Last update: October 27th, 2025)
