@@ -3,7 +3,7 @@ Code for implementing a simulation study to investigate the effect of near posit
 
 
 ### Reference
-Spreafico M (2025). Impact of near-positivity violations on IPTW-estimated marginal structural survival models with time-dependent confounding. *Biometrical Journal* - in press. [Pre-print version: https://arxiv.org/abs/2403.19606]
+Spreafico M (2025). **Impact of Near-Positivity Violations on IPTW-Estimated Marginal Structural Survival Models With Time-Dependent Confounding**. *Biometrical Journal*, 67(6):e70093. doi: [10.1002/bimj.70093](https://onlinelibrary.wiley.com/doi/10.1002/bimj.70093)
 
 ## Description
 
@@ -62,4 +62,4 @@ To reproduce the **Simulation Study II** in Section 5.2 of the manuscript:
 2) Then run the scripts **AII_2 results.R** to estimate the performance measures in Section 5.2.2 and **AII_3 figures_4_5.R** for reproducing Figures 4 and 5;
 3) finally, run the script **AII_4 figures_9_10_11 tables_2_3.R** for reproducing Figures 9, 10, 11 and Tables 2 and 3 in Section 5.2.3.
   
-(Last update: October 27th, 2025)
+(Last update: November 3rd, 2025)
